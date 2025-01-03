@@ -169,3 +169,14 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# exclude everything in the identities directory except _template.yaml
+identities/**
+!identities/_template.yaml
+
+# exclude everything in the items directory except _template.yaml
+items/**
+!items/_template.yaml
+
+# exclude all outputs
+outputs/**

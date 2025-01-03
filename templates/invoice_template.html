@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Invoice {{ invoice.number }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            color: #333;
+        }
+
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 2px solid #000;
+        }
+
+        .company,
+        .customer {
+            width: 45%;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .company {
+            float: left;
+        }
+
+        .customer {
+            float: right;
+        }
+
+        .details {
+            clear: both;
+            margin-top: 20px;
+        }
+
+        .invoice-info {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #555;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .totals {
+            margin-top: 20px;
+            text-align: right;
+            font-size: 12px;
+        }
+
+        .totals p {
+            margin: 5px 0;
+        }
+
+        .notes {
+            margin-top: 30px;
+            font-size: 12px;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>INVOICE</h1>
+    </div>
+    <div class="details clearfix">
+        <div class="company">
+            <h2>{{ biller.name }}</h2>
+            <p>
+                {{ biller.address | nl2br }}<br>
+                Phone: {{ biller.phone }}<br>
+                Email: {{ biller.email }}
+            </p>
+        </div>
+        <div class="customer">
+            <h3>Bill To:</h3>
+            <p>
+                {{ billee.name }}<br>
+                {{ billee.address | nl2br }}<br>
+                Phone: {{ billee.phone }}<br>
+                Email: {{ billee.email }}
+            </p>
+        </div>
+    </div>
+    <div class="invoice-info">
+        <p><strong>Invoice Number:</strong> {{ invoice.number }}</p>
+        <p><strong>Invoice Date:</strong> {{ invoice.date }}</p>
+        <!-- Due Date Removed -->
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:50%;">Description</th>
+                <th style="width:10%;">Quantity</th>
+                <th style="width:20%;">Unit Price ($)</th>
+                <th style="width:20%;">Total ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ "%.2f"|format(item.unit_price) }}</td>
+                <td>{{ "%.2f"|format(item.quantity * item.unit_price) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="totals">
+        <p><strong>Subtotal:</strong> ${{ "%.2f"|format(subtotal) }}</p>
+        {% if tax_rate > 0 %}
+        <p><strong>Tax ({{ tax_rate * 100 }}%):</strong> ${{ "%.2f"|format(tax) }}</p>
+        {% endif %}
+        <p><strong>Total:</strong> ${{ "%.2f"|format(total) }}</p>
+    </div>
+    <div class="notes">
+        <p><strong>Notes:</strong></p>
+        <p>{{ notes }}</p>
+    </div>
+</body>
+
+</html>
