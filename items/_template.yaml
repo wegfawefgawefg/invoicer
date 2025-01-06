@@ -1,11 +1,14 @@
 - description: "Product 1"
   quantity: 2
   unit_price: 50.00
+  date: "2024-12-01"
 
 - description: "Service A"
   quantity: 5
   unit_price: 80.00
+  date: "2024-12-03"
 
 - description: "Product 2"
   quantity: 1
   unit_price: 150.00
+  date: "2024-12-05"

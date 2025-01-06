@@ -5,21 +5,25 @@
     <meta charset="utf-8">
     <title>Invoice {{ invoice.number }}</title>
     <style>
+        /* Updated styles with reduced margins and padding */
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
+            margin: 20px;
+            /* Reduced from 40px */
             color: #333;
         }
 
         .header {
             text-align: center;
-            padding: 10px 0;
+            padding: 5px 0;
+            /* Reduced from 10px 0 */
             border-bottom: 2px solid #000;
         }
 
         .company,
         .customer {
-            width: 45%;
+            width: 48%;
+            /* Slightly reduced to accommodate tighter spacing */
             display: inline-block;
             vertical-align: top;
         }
@@ -34,17 +38,20 @@
 
         .details {
             clear: both;
-            margin-top: 20px;
+            margin-top: 10px;
+            /* Reduced from 20px */
         }
 
         .invoice-info {
-            margin-top: 30px;
+            margin-top: 15px;
+            /* Reduced from 30px */
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 10px;
+            /* Reduced from 20px */
             font-size: 12px;
         }
 
@@ -56,7 +63,8 @@
 
         th,
         td {
-            padding: 8px;
+            padding: 6px;
+            /* Reduced from 8px */
             text-align: left;
         }
 
@@ -65,18 +73,26 @@
         }
 
         .totals {
-            margin-top: 20px;
+            margin-top: 10px;
+            /* Reduced from 20px */
             text-align: right;
             font-size: 12px;
         }
 
         .totals p {
-            margin: 5px 0;
+            margin: 3px 0;
+            /* Reduced from 5px 0 */
         }
 
         .notes {
-            margin-top: 30px;
+            margin-top: 15px;
+            /* Reduced from 30px */
             font-size: 12px;
+        }
+
+        .notes p {
+            margin: 3px 0;
+            /* Added for consistency */
         }
 
         .clearfix::after {
@@ -118,7 +134,8 @@
     <table>
         <thead>
             <tr>
-                <th style="width:50%;">Description</th>
+                <th style="width:15%;">Date</th>
+                <th style="width:35%;">Description</th>
                 <th style="width:10%;">Quantity</th>
                 <th style="width:20%;">Unit Price ($)</th>
                 <th style="width:20%;">Total ($)</th>
@@ -127,6 +144,7 @@
         <tbody>
             {% for item in items %}
             <tr>
+                <td>{{ item.date }}</td>
                 <td>{{ item.description }}</td>
                 <td>{{ item.quantity }}</td>
                 <td>{{ "%.2f"|format(item.unit_price) }}</td>

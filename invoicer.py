@@ -58,14 +58,16 @@ def calculate_totals(items, tax_rate):
 def parse_date(date_str):
     """
     Parses the input date string into a datetime object.
-    Supports 'YYYY/MM/DD' and 'MM/DD/YYYY' formats.
+    Supports 'YYYY-MM-DD', 'YYYY/MM/DD', 'MM/DD/YYYY' formats.
     """
-    for fmt in ("%Y/%m/%d", "%m/%d/%Y"):
+    for fmt in ("%Y-%m-%d", "%Y/%m/%d", "%m/%d/%Y"):
         try:
             return datetime.strptime(date_str, fmt)
         except ValueError:
             continue
-    print("Error: Date format is invalid. Please use 'YYYY/MM/DD' or 'MM/DD/YYYY'.")
+    print(
+        "Error: Date format is invalid. Please use 'YYYY-MM-DD', 'YYYY/MM/DD', or 'MM/DD/YYYY'."
+    )
     sys.exit(1)
 
 
@@ -113,7 +115,7 @@ def main():
     parser.add_argument(
         "--date",
         required=False,
-        help="Invoice date in 'YYYY/MM/DD' or 'MM/DD/YYYY' format.",
+        help="Invoice date in 'YYYY/MM/DD', 'YYYY-MM-DD', or 'MM/DD/YYYY' format.",
     )
     args = parser.parse_args()
 
@@ -134,8 +136,33 @@ def main():
         print("Error: Items file should contain a list of items.")
         sys.exit(1)
     for idx, item in enumerate(items_data):
-        if not all(key in item for key in ["description", "quantity", "unit_price"]):
-            print(f"Error: Item at index {idx} is missing required fields.")
+        required_item_fields = ["description", "quantity", "unit_price", "date"]
+        missing_fields = [
+            field
+            for field in required_item_fields
+            if field not in item or not item[field]
+        ]
+        if missing_fields:
+            print(
+                f"Error: Item at index {idx} is missing required fields: {', '.join(missing_fields)}."
+            )
+            sys.exit(1)
+
+        # Parse and format the date
+        parsed_date = parse_date(item["date"])
+        # You can format the date as needed. For example, 'MM/DD/YYYY':
+        item["date"] = parsed_date.strftime("%m/%d/%Y")
+
+        # Optionally, validate quantity and unit_price
+        if not isinstance(item["quantity"], (int, float)) or item["quantity"] < 0:
+            print(
+                f"Error: Item at index {idx} has invalid quantity '{item['quantity']}'. Must be a non-negative number."
+            )
+            sys.exit(1)
+        if not isinstance(item["unit_price"], (int, float)) or item["unit_price"] < 0:
+            print(
+                f"Error: Item at index {idx} has invalid unit_price '{item['unit_price']}'. Must be a non-negative number."
+            )
             sys.exit(1)
 
     # Determine invoice date
