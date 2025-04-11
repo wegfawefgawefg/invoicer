@@ -184,6 +184,9 @@ def main():
     # Calculate totals
     subtotal, tax, total = calculate_totals(items_data, tax_rate)
 
+    # Sort items by date
+    items_data.sort(key=lambda x: x["date"])
+
     # Render HTML
     rendered_html = render_invoice(
         biller, billee, invoice, items_data, subtotal, tax, total, tax_rate, notes
